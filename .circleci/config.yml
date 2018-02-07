@@ -16,7 +16,7 @@ workflows:
   feature_jobs:
     jobs:
       - contexts:
-          context: org-global
+          context: 👘
       - write_workspace
       - use_workspace:
           requires:
