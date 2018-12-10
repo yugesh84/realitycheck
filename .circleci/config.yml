@@ -208,6 +208,7 @@ jobs:
       - attach_workspace:
            at: ./attached
       - run: |
+          set -u
           BUILD_NUMBER="$(cat ./attached/build/number)"
           if [[ -z "${BUILD_NUMBER}" ]]; then
             echo "build number not set"
