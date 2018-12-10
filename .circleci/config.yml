@@ -251,10 +251,10 @@ jobs:
           fi
           SSH_HOST="$(cut -d':' -f1 <<< "$SSH_HOST_PORT")"
           SSH_PORT="$(cut -d':' -f2 <<< "$SSH_HOST_PORT")"
-          SSH_TEST_VAR="$(ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_HOST} 'echo $SSH_TEST_VAR')"
+          RESULT="$(ssh -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_HOST} 'echo $SSH_TEST_VAR')"
           EXPECT="success"
-          if [ "${SSH_TEST_VAR}" != "${EXPECT}" ]; then
-            echo "--Got '${SSH_TEST_VAR}', Expected '${EXPECT}'"
+          if [ "${RESULT}" != "${EXPECT}" ]; then
+            echo "--Got '${RESULT}', Expected '${EXPECT}'"
             exit 1
           fi
           echo "--SSH Test Successful"
