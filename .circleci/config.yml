@@ -221,7 +221,11 @@ jobs:
           LIMIT=10
           TIMEOUT=5
           while [[ $I -lt $LIMIT ]]; do
-            SSH_BUILD_NUM="$(curl -s -k -XPOST "$URL" | jq -r '.build_num')"
+            CURL_RETRY_SSH_RESPONSE="$(curl -s -k -XPOST "$URL")"
+            if [ "$DEBUG" = "true" ]; then
+              echo "retry build with ssh api response: ${CURL_RETRY_SSH_RESPONSE}"
+            fi
+            SSH_BUILD_NUM="$(jq -r '.build_num' <<< "${CURL_RETRY_SSH_RESPONSE}")"
             echo "ssh build num: '$SSH_BUILD_NUM'"
             if [[ -z "$SSH_BUILD_NUM" ]] || [ "$SSH_BUILD_NUM" = "null" ]; then
               I=$((I+1))
@@ -237,7 +241,11 @@ jobs:
           BUILD_URL="$BASE_URL/api/v1.1/project/$VCS_TYPE/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$SSH_BUILD_NUM?circle-token=$CIRCLE_TOKEN"
           I=0
           while [[ $I -lt $LIMIT ]]; do
-            SSH_HOST_PORT="$(curl -s -k "$BUILD_URL" | jq -r '.picard.ssh_servers[0].server')"
+            CURL_GET_BUILD_RESPONSE="$(curl -s -k "$BUILD_URL")"
+            if [ "$DEBUG" = "true" ]; then
+              echo "get build api response: ${CURL_GET_BUILD_RESPONSE}"
+            fi
+            SSH_HOST_PORT="$(jq -r '.picard.ssh_servers[0].server' <<< "${CURL_GET_BUILD_RESPONSE"})"
             echo "ssh host: '$SSH_HOST_PORT'"
             if [[ -z "$SSH_HOST_PORT" ]] || [ "$SSH_HOST_PORT" = "null" ]; then
               I=$((I+1))
@@ -255,7 +263,7 @@ jobs:
           echo "--Adding SSH key"
           echo "${TEST_SSH_KEY_B64}" | base64 -d > id_rsa
           chmod 600 id_rsa
-          RESULT="$(ssh -i ./id_rsa -o StrictHostKeyChecking=no -p ${SSH_PORT} ${SSH_HOST} 'echo $SSH_TEST_VAR')"
+          RESULT="$(ssh -i ./id_rsa -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_HOST}" 'echo $SSH_TEST_VAR')"
           EXPECT="success"
           if [ "${RESULT}" != "${EXPECT}" ]; then
             echo "--Got '${RESULT}', Expected '${EXPECT}'"
