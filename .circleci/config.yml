@@ -245,7 +245,7 @@ jobs:
             if [ "$DEBUG" = "true" ]; then
               echo "get build api response: ${CURL_GET_BUILD_RESPONSE}"
             fi
-            SSH_HOST_PORT="$(jq -r '.picard.ssh_servers[0].server' <<< "${CURL_GET_BUILD_RESPONSE"})"
+            SSH_HOST_PORT="$(jq -r '.picard.ssh_servers[0].server' <<< "${CURL_GET_BUILD_RESPONSE}")"
             echo "ssh host: '$SSH_HOST_PORT'"
             if [[ -z "$SSH_HOST_PORT" ]] || [ "$SSH_HOST_PORT" = "null" ]; then
               I=$((I+1))
@@ -258,8 +258,8 @@ jobs:
             echo "--Error fetching build ${SSH_BUILD_NUM} or build does not contain SSH information"
             exit 1
           fi
-          SSH_HOST="$(cut -d':' -f1 <<< "$SSH_HOST_PORT")"
-          SSH_PORT="$(cut -d':' -f2 <<< "$SSH_HOST_PORT")"
+          SSH_HOST="$(cut -d':' -f1 <<< "${SSH_HOST_PORT}")"
+          SSH_PORT="$(cut -d':' -f2 <<< "${SSH_HOST_PORT}")"
           echo "--Adding SSH key"
           echo "${TEST_SSH_KEY_B64}" | base64 -d > id_rsa
           chmod 600 id_rsa
