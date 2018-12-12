@@ -263,7 +263,8 @@ jobs:
           echo "--Adding SSH key"
           echo "${TEST_SSH_KEY_B64}" | base64 -d > id_rsa
           chmod 600 id_rsa
-          RESULT="$(ssh -i ./id_rsa -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_HOST}" 'echo $SSH_TEST_VAR')"
+          ssh-add id_rsa
+          RESULT="$(ssh -o StrictHostKeyChecking=no -p "${SSH_PORT}" "${SSH_HOST}" 'echo $SSH_TEST_VAR')"
           EXPECT="success"
           if [ "${RESULT}" != "${EXPECT}" ]; then
             echo "--Got '${RESULT}', Expected '${EXPECT}'"
