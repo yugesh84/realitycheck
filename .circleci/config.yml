@@ -215,6 +215,3 @@ workflows:
             - write_workspace
       - artifacts_test_results
 
-  sample_workflow: 
-    jobs: 
-      -sample_job
