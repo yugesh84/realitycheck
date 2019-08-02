@@ -159,6 +159,7 @@ jobs:
               exit 1
             else
               echo "The cache was populated"
+              exit 1
             fi
 
   artifacts_test_results:
