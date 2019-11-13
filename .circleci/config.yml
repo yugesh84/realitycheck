@@ -148,7 +148,7 @@ jobs:
             - ./stuff/thing
 
       - run: rm -rf ./stuff/thing
-      - run: sleep 5
+      - run: sleep 120
 
       - restore_cache:
             keys:
