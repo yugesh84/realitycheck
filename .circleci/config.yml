@@ -189,11 +189,16 @@ workflows:
   version: 2
   resource_class_jobs:
     jobs:
+      - hold: 
+          type: approval
       - small
       - medium
       - medium+
       - large
-      - xlarge
+      - xlarge: 
+          requires: 
+            - hold
+      
 
   vm_jobs:
     jobs:
