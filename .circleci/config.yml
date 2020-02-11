@@ -207,9 +207,9 @@ workflows:
     jobs:
       - save_and_restore_cache
       - contexts:
-          context: org-global
+          context: yugesh-org-global
       - multi-contexts:
-          context: individual-local
+          context: yugesh-individual-local
       - write_workspace
       - read_workspace:
           requires:
